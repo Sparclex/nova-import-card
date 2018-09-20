@@ -1,9 +1,6 @@
 # A card which lets you batch import resources
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/sparclex/nova-import-card.svg?style=flat-square)](https://packagist.org/packages/sparclex/nova-import-card)
-![CircleCI branch](https://img.shields.io/circleci/project/github/sparclex/nova-import-card/master.svg?style=flat-square)
-[![Build Status](https://img.shields.io/travis/sparclex/nova-import-card/master.svg?style=flat-square)](https://travis-ci.org/sparclex/nova-import-card)
-[![Quality Score](https://img.shields.io/scrutinizer/g/sparclex/nova-import-card.svg?style=flat-square)](https://scrutinizer-ci.com/g/sparclex/nova-import-card)
 [![Total Downloads](https://img.shields.io/packagist/dt/sparclex/nova-import-card.svg?style=flat-square)](https://packagist.org/packages/sparclex/nova-import-card)
 
 

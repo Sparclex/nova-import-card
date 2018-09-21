@@ -6,8 +6,7 @@
 
 A customizable import card for laravel nova.
 
-Add a screenshot of the tool here.
-
+![Nova Import Card Screenshot](https://raw.githubusercontent.com/sparclex/screenshots/master/nova-import-card-resource-index.png)
 ## Installation
 
 You can install the package in to a Laravel app that uses [Nova](https://nova.laravel.com) via composer:

@@ -1,7 +1,9 @@
 # A card which lets you batch import resources
 
-[![Latest Version on Packagist](https://img.shields.io/packagist/v/sparclex/nova-import-card.svg?style=flat-square)](https://packagist.org/packages/sparclex/nova-import-card)
-[![Total Downloads](https://img.shields.io/packagist/dt/sparclex/nova-import-card.svg?style=flat-square)](https://packagist.org/packages/sparclex/nova-import-card)
+[![Latest Stable Version](https://poser.pugx.org/sparclex/nova-import-card/v/stable)](https://packagist.org/packages/sparclex/nova-import-card)
+[![Total Downloads](https://poser.pugx.org/sparclex/nova-import-card/downloads)](https://packagist.org/packages/sparclex/nova-import-card)
+[![Latest Unstable Version](https://poser.pugx.org/sparclex/nova-import-card/v/unstable)](https://packagist.org/packages/sparclex/nova-import-card)
+[![License](https://poser.pugx.org/sparclex/nova-import-card/license)](https://packagist.org/packages/sparclex/nova-import-card)
 
 
 A customizable import card for laravel nova.

@@ -28,7 +28,7 @@ public function card()
 {
     return [
         // ...
-        new \Sparclex\NovaImportCard\NovaImportCard(self::class),
+        new \Sparclex\NovaImportCard\NovaImportCard(App\Nova\User::class),
     ];
 }
 ```

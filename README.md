@@ -148,3 +148,6 @@ The MIT License (MIT). Please see [License File](LICENSE.md) for more informatio
 ## Todo
 - [ ] Add tests
 - [ ] Add support for more File Types
+- [ ] Show all error messages
+- [ ] Chunk inserts
+- [ ] Queable

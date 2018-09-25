@@ -20,6 +20,10 @@ class CardServiceProvider extends ServiceProvider
             $this->routes();
         });
 
+        $this->publishes([
+            __DIR__ . '/config.php' => config_path('sparclex-nova-import-card.php'),
+        ]);
+
         Nova::serving(function (ServingNova $event) {
             Nova::script('nova-import-card', __DIR__.'/../dist/js/card.js');
             Nova::style('nova-import-card', __DIR__.'/../dist/css/card.css');
@@ -49,6 +53,8 @@ class CardServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        $this->mergeConfigFrom(
+            __DIR__ . '/config.php', 'sparclex-nova-import-card'
+        );
     }
 }

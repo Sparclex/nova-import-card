@@ -3,7 +3,7 @@
 namespace Sparclex\NovaImportCard;
 
 use Illuminate\Contracts\Validation\Factory;
-use Illuminate\Support\Facades\DB;
+use Laravel\Nova\Http\Requests\NovaRequest;
 
 /**
  * Imports the uploaded data which was extracted by the
@@ -37,37 +37,16 @@ class ImportHandler
      * @param $model
      * @return string|null error message
      */
-    public function handle($model)
+    public function handle($resource)
     {
         $data = $this->data;
-        try {
-            DB::beginTransaction();
-            foreach ($data as $entry) {
-                foreach ($entry as $attribute => $value) {
-                    $model->{$attribute} = $value;
-                }
-                $model->save();
-                $model = $model->newInstance();
-            }
-            DB::commit();
-        } catch (\Exception $e) {
-            DB::rollBack();
-            return $e->getMessage();
+        foreach ($data as $entry) {
+            [$model, $callbacks] = $resource::fill(
+                new ImportNovaRequest($entry), $resource::newModel()
+            );
+            $model->save();
+            collect($callbacks)->each->__invoke();
         }
-        return null;
-    }
-
-    /**
-     * Validates the uploaded data
-     *
-     * @param $rules resource field creation rules
-     */
-    public function validate($rules)
-    {
-
-        $this->getValidationFactory()->make(
-            $this->data, $rules
-        )->validate();
     }
 
     public function getValidationFactory()

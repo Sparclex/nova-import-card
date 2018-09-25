@@ -4,6 +4,7 @@ namespace Sparclex\NovaImportCard;
 
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\DB;
 use Laravel\Nova\Actions\Action;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
@@ -14,29 +15,36 @@ class ImportController extends Controller
     public function handle(NovaRequest $request)
     {
         $resource = $request->newResource();
-        $rules = $resource->availableFields($request)->mapWithKeys(function($field) use($request) {
-            return $field->getCreationRules($request);
-        })->mapWithKeys(function($rule, $key) {
-            return ["*.".$key => $rule];
-        });
-        $fileReader = $resource::$importFileReader ?? CsvFileReader::class;
-        $importHandler = $resource::$importHandler ?? ImportHandler::class;
+        $fileReader = $resource::$importFileReader ?? config('sparclex-nova-import-card.file_reader');
+
 
         $data = $this->validate($request, [
             'file' => 'required|file|mimes:' . $fileReader::mimes()
         ]);
-
         $fileReader = new $fileReader($data['file']);
         $data = $fileReader->read();
         $fileReader->afterRead();
 
-        $importHandler = new $importHandler($data);
-        $importHandler->validate($rules->toArray());
+        $this->validateFields($data, $request, $resource);
 
-        if($error = $importHandler->handle($resource->resource)) {
-            return Action::danger($error);
-        } else {
-            return Action::message(__('Import successful'));
-        }
+        DB::transaction(function() use($resource, $data) {
+            $importHandler = $resource::$importHandler ?? config('sparclex-nova-import-card.import_handler');
+            (new $importHandler($data))->handle($resource);
+        });
+
+        return Action::message(__('Import successful'));
+    }
+
+    /**
+     * @param $data
+     * @param NovaRequest $request
+     * @param $resource
+     */
+    protected function validateFields($data, $request, $resource): void
+    {
+        $rules = collect($resource::rulesForCreation($request))->mapWithKeys(function($rule, $key) {
+            return ["*.".$key => $rule];
+        });
+        $this->getValidationFactory()->make($data, $rules->toArray())->validate();
     }
 }

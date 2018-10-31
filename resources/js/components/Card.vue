@@ -75,6 +75,7 @@
                 Nova.request().post('/nova-vendor/sparclex/nova-import-card/endpoint/' + this.card.resource, formData)
                     .then(({data}) => {
                         this.$toasted.success(data.message);
+                        this.$parent.$parent.$parent.$parent.getResources();
                     })
                     .catch(({response}) => {
                         this.errors = response.data.errors;

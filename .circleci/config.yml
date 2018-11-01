@@ -9,6 +9,9 @@ jobs:
     - run: sudo docker-php-ext-install zip
     - run: sudo docker-php-ext-install bcmath
     - run: sudo composer self-update
+    - run:
+          name: Store Nova Credentials
+          command: echo "{\"http-basic\":{\"nova.laravel.com\":{\"username\":\"$NOVA_USERNAME\",\"password\":\"$NOVA_PASSWORD\"}}}" > ~/.composer/auth.jsong
     - restore_cache:
           keys:
           - composer-v1-{{ checksum "composer.lock" }}

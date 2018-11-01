@@ -2,7 +2,7 @@
     <card class="flex flex-col">
         <div class="px-3 py-3">
             <h1 class="text-xl font-light">Import {{this.card.resourceLabel}}</h1>
-            <form @submit.prevent="processImport">
+            <form @submit.prevent="processImport" ref="form">
                 <div class="py-4">
                     <span class="form-file mr-4">
                         <input
@@ -67,6 +67,9 @@ export default {
             this.file = this.$refs.fileField.files[0];
         },
         processImport() {
+            if (!this.file) {
+                return;
+            }
             this.working = true;
             let formData = new FormData();
             formData.append('file', this.file);
@@ -78,11 +81,17 @@ export default {
                 .then(({ data }) => {
                     this.$toasted.success(data.message);
                     this.$parent.$parent.$parent.$parent.getResources();
+                    this.errors = null;
                 })
                 .catch(({ response }) => {
                     this.errors = response.data.errors;
                 })
-                .finally(() => (this.working = false));
+                .finally(() => {
+                    this.working = false;
+                    this.file = null;
+                    this.fileName = '';
+                    this.$refs.form.reset();
+                });
         },
     },
     computed: {

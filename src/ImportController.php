@@ -3,26 +3,28 @@
 namespace Sparclex\NovaImportCard;
 
 use Laravel\Nova\Actions\Action;
-use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\DB;
 use Laravel\Nova\Http\Requests\NovaRequest;
-use Illuminate\Foundation\Validation\ValidatesRequests;
+use Illuminate\Support\Facades\Validator;
 
-class ImportController extends Controller
+class ImportController
 {
-    use ValidatesRequests;
 
     public function handle(NovaRequest $request)
     {
         $resource = $request->newResource();
         $fileReader = $resource::$importFileReader ?? config('sparclex-nova-import-card.file_reader');
 
-        $data = $this->validate($request, [
-            'file' => 'required|file|mimes:'.$fileReader::mimes(),
-        ]);
-        $fileReader = new $fileReader($data['file']);
-        $data = $fileReader->read();
-        $fileReader->afterRead();
+        $data = Validator::make($request->all(), [
+            'file' => 'required|file|mimes:'.$fileReader::mimes()
+        ])->validate();
+        try {
+            $fileReader = new $fileReader($data['file']);
+            $data = $fileReader->read();
+            $fileReader->afterRead();
+        } catch (\Exception $e) {
+            Action::danger(__('An error occurred during the import'));
+        }
 
         $this->validateFields($data, $request, $resource);
 
@@ -44,6 +46,6 @@ class ImportController extends Controller
         $rules = collect($resource::rulesForCreation($request))->mapWithKeys(function ($rule, $key) {
             return ['*.'.$key => $rule];
         });
-        $this->getValidationFactory()->make($data, $rules->toArray())->validate();
+        Validator::make($data, $rules->toArray())->validate();
     }
 }

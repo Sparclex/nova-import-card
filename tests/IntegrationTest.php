@@ -2,14 +2,14 @@
 
 namespace Sparclex\NovaImportCard\Tests;
 
-use Illuminate\Contracts\Auth\Authenticatable;
+use Mockery;
+use Laravel\Nova\Nova;
 use Illuminate\Queue\WorkerOptions;
 use Illuminate\Support\Facades\Hash;
-use Laravel\Nova\Nova;
-use Sparclex\NovaImportCard\Tests\Fixtures\EntryResource;
-use Mockery;
+use Illuminate\Contracts\Auth\Authenticatable;
 use Orchestra\Testbench\TestCase as Orchestra;
 use Sparclex\NovaImportCard\CardServiceProvider;
+use Sparclex\NovaImportCard\Tests\Fixtures\EntryResource;
 
 abstract class IntegrationTest extends Orchestra
 {
@@ -33,7 +33,7 @@ abstract class IntegrationTest extends Orchestra
 
         $this->loadMigrations();
 
-        $this->withFactories(__DIR__ . '/Factories');
+        $this->withFactories(__DIR__.'/Factories');
 
         Nova::$tools = [];
         Nova::$resources = [];
@@ -56,7 +56,7 @@ abstract class IntegrationTest extends Orchestra
     {
         $this->loadMigrationsFrom([
             '--database' => 'sqlite',
-            '--realpath' => realpath(__DIR__ . '/Migrations'),
+            '--realpath' => realpath(__DIR__.'/Migrations'),
         ]);
     }
 

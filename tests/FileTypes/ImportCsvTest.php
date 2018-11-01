@@ -2,11 +2,10 @@
 
 namespace Sparclex\NovaImportCard\Tests\FileTypes;
 
-
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\Testing\File;
 use Illuminate\Support\Facades\Storage;
 use Sparclex\NovaImportCard\Tests\Fixtures\Entry;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Sparclex\NovaImportCard\Tests\IntegrationTest;
 
 class ImportCsvTest extends IntegrationTest
@@ -22,26 +21,26 @@ class ImportCsvTest extends IntegrationTest
         $this
             ->json('post',
                 'nova-vendor/sparclex/nova-import-card/endpoint/entries', [
-                    'file' => $this->createTmpFile(__DIR__ . '/../stubs/entries.csv')
+                    'file' => $this->createTmpFile(__DIR__.'/../stubs/entries.csv'),
                 ])
             ->assertSuccessful();
 
         $this->assertDatabaseHas('entries', [
             'title' => 'Entry 1',
-            'amount' => 10
+            'amount' => 10,
         ]);
 
         $this->assertDatabaseHas('entries', [
             'title' => 'Entry 2',
-            'amount' => null
+            'amount' => null,
         ]);
-
     }
 
     protected function createTmpFile($path)
     {
         $tmp = tmpfile();
         fwrite($tmp, file_get_contents($path));
+
         return new File('file.csv', $tmp);
     }
 }

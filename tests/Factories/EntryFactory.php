@@ -16,6 +16,6 @@ use Faker\Generator as Faker;
 $factory->define(\Laravel\Nova\Tests\Fixtures\Entry::class, function (Faker $faker) {
     return [
         'title' => $faker->word,
-        'amount' => $faker->randomNumber()
+        'amount' => $faker->randomNumber(),
     ];
 });

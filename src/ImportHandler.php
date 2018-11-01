@@ -36,6 +36,7 @@ class ImportHandler
     {
         $data = $this->data;
         foreach ($data as $entry) {
+            $entry = array_filter($entry);
             [$model, $callbacks] = $resource::fill(
                 new ImportNovaRequest($entry), $resource::newModel()
             );

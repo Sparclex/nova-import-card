@@ -4,19 +4,18 @@ namespace Sparclex\NovaImportCard;
 
 use Laravel\Nova\Actions\Action;
 use Illuminate\Support\Facades\DB;
-use Laravel\Nova\Http\Requests\NovaRequest;
 use Illuminate\Support\Facades\Validator;
+use Laravel\Nova\Http\Requests\NovaRequest;
 
 class ImportController
 {
-
     public function handle(NovaRequest $request)
     {
         $resource = $request->newResource();
         $fileReader = $resource::$importFileReader ?? config('sparclex-nova-import-card.file_reader');
 
         $data = Validator::make($request->all(), [
-            'file' => 'required|file|mimes:'.$fileReader::mimes()
+            'file' => 'required|file|mimes:'.$fileReader::mimes(),
         ])->validate();
         try {
             $fileReader = new $fileReader($data['file']);

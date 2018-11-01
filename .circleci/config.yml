@@ -38,4 +38,4 @@ jobs:
           command: yarn check-format
     - run:
           name: Run phpunit
-          command: phpunit
+          command: vendor/bin/phpunit

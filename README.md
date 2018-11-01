@@ -4,7 +4,8 @@
 [![Total Downloads](https://poser.pugx.org/sparclex/nova-import-card/downloads)](https://packagist.org/packages/sparclex/nova-import-card)
 [![Latest Unstable Version](https://poser.pugx.org/sparclex/nova-import-card/v/unstable)](https://packagist.org/packages/sparclex/nova-import-card)
 [![License](https://poser.pugx.org/sparclex/nova-import-card/license)](https://packagist.org/packages/sparclex/nova-import-card)
-
+[![StyleCI](https://github.styleci.io/repos/149668592/shield?branch=master)](https://github.styleci.io/repos/149668592)
+[![CircleCI](https://circleci.com/gh/Sparclex/nova-import-card.svg?style=svg)](https://circleci.com/gh/Sparclex/nova-import-card)
 
 A customizable import card for laravel nova.
 

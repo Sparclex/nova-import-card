@@ -30,7 +30,6 @@ jobs:
           key: node-v1-{{ checksum "package.json" }}
           paths:
           - node_modules
-    - run: touch database/database.sqlite
     - run:
           name: Run lint
           command: yarn lint

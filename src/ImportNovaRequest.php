@@ -23,12 +23,13 @@ class ImportNovaRequest extends NovaRequest
      */
     public function input($key = null, $default = null)
     {
-        if (!$key) {
+        if (! $key) {
             return $this->data;
         }
-        if (!isset($this->data[$key])) {
+        if (! isset($this->data[$key])) {
             return $default;
         }
+
         return $this->data[$key];
     }
 }

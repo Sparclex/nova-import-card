@@ -21,7 +21,7 @@ class CardServiceProvider extends ServiceProvider
         });
 
         $this->publishes([
-            __DIR__ . '/config.php' => config_path('sparclex-nova-import-card.php'),
+            __DIR__.'/config.php' => config_path('sparclex-nova-import-card.php'),
         ]);
 
         Nova::serving(function (ServingNova $event) {
@@ -54,7 +54,7 @@ class CardServiceProvider extends ServiceProvider
     public function register()
     {
         $this->mergeConfigFrom(
-            __DIR__ . '/config.php', 'sparclex-nova-import-card'
+            __DIR__.'/config.php', 'sparclex-nova-import-card'
         );
     }
 }

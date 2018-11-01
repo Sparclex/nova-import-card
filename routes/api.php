@@ -18,5 +18,4 @@ use Illuminate\Support\Facades\Route;
 //     //
 // });
 
-
 Route::post('/endpoint/{resource}', \Sparclex\NovaImportCard\ImportController::class.'@handle');

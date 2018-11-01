@@ -2,11 +2,11 @@
 
 namespace Sparclex\NovaImportCard;
 
-use Illuminate\Foundation\Validation\ValidatesRequests;
+use Laravel\Nova\Actions\Action;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\DB;
-use Laravel\Nova\Actions\Action;
 use Laravel\Nova\Http\Requests\NovaRequest;
+use Illuminate\Foundation\Validation\ValidatesRequests;
 
 class ImportController extends Controller
 {
@@ -17,9 +17,8 @@ class ImportController extends Controller
         $resource = $request->newResource();
         $fileReader = $resource::$importFileReader ?? config('sparclex-nova-import-card.file_reader');
 
-
         $data = $this->validate($request, [
-            'file' => 'required|file|mimes:' . $fileReader::mimes()
+            'file' => 'required|file|mimes:'.$fileReader::mimes(),
         ]);
         $fileReader = new $fileReader($data['file']);
         $data = $fileReader->read();
@@ -27,7 +26,7 @@ class ImportController extends Controller
 
         $this->validateFields($data, $request, $resource);
 
-        DB::transaction(function() use($resource, $data) {
+        DB::transaction(function () use ($resource, $data) {
             $importHandler = $resource::$importHandler ?? config('sparclex-nova-import-card.import_handler');
             (new $importHandler($data))->handle($resource);
         });
@@ -42,8 +41,8 @@ class ImportController extends Controller
      */
     protected function validateFields($data, $request, $resource): void
     {
-        $rules = collect($resource::rulesForCreation($request))->mapWithKeys(function($rule, $key) {
-            return ["*.".$key => $rule];
+        $rules = collect($resource::rulesForCreation($request))->mapWithKeys(function ($rule, $key) {
+            return ['*.'.$key => $rule];
         });
         $this->getValidationFactory()->make($data, $rules->toArray())->validate();
     }

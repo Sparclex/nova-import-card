@@ -14,17 +14,15 @@ class NovaImportCard extends Card
      */
     public $width = '1/2';
 
-
     public function __construct($resource)
     {
-
         parent::__construct();
         $this->withMeta([
             'fields' => [
-                new File('File')
+                new File('File'),
             ],
             'resourceLabel' => $resource::label(),
-            'resource' => $resource::uriKey()
+            'resource' => $resource::uriKey(),
         ]);
     }
 

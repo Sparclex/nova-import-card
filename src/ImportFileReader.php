@@ -2,7 +2,6 @@
 
 namespace Sparclex\NovaImportCard;
 
-
 use Illuminate\Http\UploadedFile;
 
 abstract class ImportFileReader
@@ -14,12 +13,11 @@ abstract class ImportFileReader
 
     public function __construct(UploadedFile $file)
     {
-
         $this->file = $file;
     }
 
     /**
-     * Allowed mime types
+     * Allowed mime types.
      *
      * @return string
      */
@@ -28,8 +26,8 @@ abstract class ImportFileReader
         return '';
     }
 
-    public function afterRead() {
+    public function afterRead()
+    {
         unlink($this->file->getRealPath());
     }
-
 }

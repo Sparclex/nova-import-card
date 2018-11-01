@@ -14,18 +14,19 @@ class CsvFileReader extends ImportFileReader
         $data = [];
         $columns = null;
         $handle = fopen($this->file->getRealPath(), 'r');
-        while (($row = fgetcsv($handle)) !== FALSE) {
-            if(!$columns) {
+        while (($row = fgetcsv($handle)) !== false) {
+            if (! $columns) {
                 $columns = $row;
                 continue;
             }
             $currentRow = count($data);
             $data[$currentRow] = [];
-            foreach($row as $key => $value) {
+            foreach ($row as $key => $value) {
                 $data[$currentRow][$columns[$key]] = $value;
             }
         }
         fclose($handle);
+
         return $data;
     }
 }

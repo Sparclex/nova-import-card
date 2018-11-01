@@ -11,7 +11,7 @@ jobs:
     - run: sudo composer self-update
     - run:
           name: Store Nova Credentials
-          command: echo "{\"http-basic\":{\"nova.laravel.com\":{\"username\":\"$NOVA_USERNAME\",\"password\":\"$NOVA_PASSWORD\"}}}" > ~/.composer/auth.jsong
+          command: echo "{\"http-basic\":{\"nova.laravel.com\":{\"username\":\"$NOVA_USERNAME\",\"password\":\"$NOVA_PASSWORD\"}}}" > auth.json
     - restore_cache:
           keys:
           - composer-v1-{{ checksum "composer.lock" }}

@@ -28,8 +28,6 @@ abstract class ImportFileReader
 
     public function afterRead()
     {
-        if (file_exists($this->file->getRealPath())) {
-            unlink($this->file->getRealPath());
-        }
+
     }
 }

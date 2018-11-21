@@ -44,6 +44,7 @@ class ImportHandler
             $model->save();
             collect($callbacks)->each->__invoke();
         }
+
         return Action::message(__('Import successful'));
     }
 

@@ -28,6 +28,5 @@ abstract class ImportFileReader
 
     public function afterRead()
     {
-
     }
 }

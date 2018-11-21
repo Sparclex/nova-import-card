@@ -29,8 +29,10 @@ class ImportController
 
         $message = DB::transaction(function () use ($resource, $data) {
             $importHandler = $resource::$importHandler ?? config('sparclex-nova-import-card.import_handler');
+
             return (new $importHandler($data))->handle($resource);
         });
+
         return isset($message['danger']) ? response($message, 422) : $message;
     }
 

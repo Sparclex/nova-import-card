@@ -10,10 +10,10 @@
                             class="form-file-input"
                             type="file"
                             id="import-file"
-                            name="name"
+                            :name="inputName"
                             @change="fileChange"
                         />
-                        <label for="import-file" class="form-file-btn btn btn-default btn-primary">
+                        <label :for="inputName" class="form-file-btn btn btn-default btn-primary">
                             {{__('Choose File')}}
                         </label>
                     </span>
@@ -105,6 +105,10 @@ export default {
         firstError() {
             return this.errors ? this.errors[Object.keys(this.errors)[0]][0] : null;
         },
+
+        inputName() {
+            return 'file-import-input-'+ this.card.resource;
+        }
     },
 };
 </script>

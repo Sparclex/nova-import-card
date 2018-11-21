@@ -84,7 +84,7 @@ export default {
                     this.errors = null;
                 })
                 .catch(({ response }) => {
-                    if(response.data.danger) {
+                    if (response.data.danger) {
                         this.$toasted.error(response.data.danger);
                         this.errors = null;
                     } else {
@@ -112,8 +112,8 @@ export default {
         },
 
         inputName() {
-            return 'file-import-input-'+ this.card.resource;
-        }
+            return 'file-import-input-' + this.card.resource;
+        },
     },
 };
 </script>

@@ -102,6 +102,7 @@ class CustomImportHandler extends Sparclex\NovaImportCard\ImportHandler
         // ...
         // custom import handling
         // ...
+        return Action::message(__('Success'));
     }
 } 
 ```

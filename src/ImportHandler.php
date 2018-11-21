@@ -2,6 +2,7 @@
 
 namespace Sparclex\NovaImportCard;
 
+use Laravel\Nova\Actions\Action;
 use Illuminate\Contracts\Validation\Factory;
 
 /**
@@ -43,6 +44,7 @@ class ImportHandler
             $model->save();
             collect($callbacks)->each->__invoke();
         }
+        return Action::message(__('Import successful'));
     }
 
     public function getValidationFactory()

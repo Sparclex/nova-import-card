@@ -9,7 +9,7 @@
                             ref="fileField"
                             class="form-file-input"
                             type="file"
-                            id="import-file"
+                            :id="inputName"
                             :name="inputName"
                             @change="fileChange"
                         />
@@ -84,7 +84,12 @@ export default {
                     this.errors = null;
                 })
                 .catch(({ response }) => {
-                    this.errors = response.data.errors;
+                    if(response.data.danger) {
+                        this.$toasted.error(response.data.danger);
+                        this.errors = null;
+                    } else {
+                        this.errors = response.data.errors;
+                    }
                 })
                 .finally(() => {
                     this.working = false;

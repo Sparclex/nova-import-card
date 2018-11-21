@@ -27,12 +27,11 @@ class ImportController
 
         $this->validateFields($data, $request, $resource);
 
-        DB::transaction(function () use ($resource, $data) {
+        $message = DB::transaction(function () use ($resource, $data) {
             $importHandler = $resource::$importHandler ?? config('sparclex-nova-import-card.import_handler');
-            (new $importHandler($data))->handle($resource);
+            return (new $importHandler($data))->handle($resource);
         });
-
-        return Action::message(__('Import successful'));
+        return isset($message['danger']) ? response($message, 422) : $message;
     }
 
     /**

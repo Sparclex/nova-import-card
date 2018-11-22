@@ -1,0 +1,24 @@
+language: php
+
+sudo: false
+
+cache:
+  directories:
+    - $HOME/.composer/cache
+
+matrix:
+  fast_finish: true
+  include:
+  # Laravel 5.5
+  - php: 7.0
+  - php: 7.1
+  - php: 7.2
+
+before_install:
+  - composer self-update --stable --no-interaction
+
+install:
+  - travis_retry composer install --no-suggest --no-interaction
+
+script:
+  - vendor/bin/phpunit --verbose --configuration phpunit.xml

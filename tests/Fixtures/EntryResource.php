@@ -46,7 +46,7 @@ class EntryResource extends Resource
         return [
             ID::make('ID', 'id'),
             Text::make('Title')->rules('required'),
-            Text::make('Amount')->rules('numeric'),
+            Text::make('Amount')->rules('nullable', 'numeric'),
         ];
     }
 }

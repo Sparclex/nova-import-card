@@ -7,7 +7,7 @@
 [![StyleCI](https://github.styleci.io/repos/149668592/shield?branch=master)](https://github.styleci.io/repos/149668592)
 [![CircleCI](https://circleci.com/gh/Sparclex/nova-import-card.svg?style=svg)](https://circleci.com/gh/Sparclex/nova-import-card)
 
-A customizable import card for laravel nova.
+A customizable import card for laravel nova. This package is more or less just a UI for [laravel-excel](https://laravel-excel.maatwebsite.nl) import. It is however **not** an official package from Maatwebsite.
 
 ![Nova Import Card Screenshot](https://raw.githubusercontent.com/sparclex/screenshots/master/nova-import-card-resource-index.png)
 ## Installation
@@ -37,77 +37,10 @@ public function card()
 
 ## Customization 
 
-### File Reader
+To customize the import process create a new importer class. The importer class is basically just an [import implementation of the laravel-excel package](https://laravel-excel.maatwebsite.nl/3.1/imports/). The easiest way to get started is to extend `Sparclex\NovaImportCard\BasicImporter` and overwrite the different methods. During the import process you may throw an exception of the type `Sparclex\NovaImportCard\ImportException` with an error message visible for the user. You may also add a `message(): String` method to customize the success message. 
 
-If you want to import a different file type than csv you can write your own file reader.
 
-```php
-class XmlFileReader extends ImportFileReader
-{
-    public static function mimes()
-    {
-        return 'xml,txt';
-    }
-
-    public function read(): array
-    {
-        $data = [];
-        $handle = fopen($this->file->getRealPath(), 'r');
-        // ...
-        // store xml data in array
-        // ...
-        fclose($handle);
-        return $data;
-    }
-}
-```
-
-And register the file type as default or on resource basis.
-```php
-// app/Nova/User.php
-
-class User extends Resource
-{
-
-    public static $importFileReader = XmlFileReader::class;
-    
-    // ...
-}
-
-// or app/config/sparclex-nova-import-card.php
-
-return [
-    'file_reader' => XmlFileReader::class,
-    
-    // ...
-]
-```
-
-### Import Handler
-
-You can customize how the data import is handled by defining an custom import handler. The handle method runs inside a database transaction.
-
-```php
-class CustomImportHandler extends Sparclex\NovaImportCard\ImportHandler
-{
-
-    /**
-     * Handles the data import
-     *
-     * @param $resource
-     */
-    public function handle($resource)
-    {
-        $data = $this->data;
-        // ...
-        // custom import handling
-        // ...
-        return Action::message(__('Success'));
-    }
-} 
-```
-
-and registering it as default or on resource basis.
+The custom importer class can be registered on global or resource basis.
 
 ```php
 // app/Nova/User.php
@@ -115,15 +48,15 @@ and registering it as default or on resource basis.
 class User extends Resource
 {
 
-    public static $importHandler = CustomImportHandler::class;
+    public static $importer = CustomImporter::class;
     
     // ...
 }
 
-// or app/config/sparclex-nova-import-card.php
+// or app/config/nova-import-card.php
 
 return [
-    'import_handler' => CustomImportHandler::class,
+    'importer' => CustomImporter::class,
     
     // ...
 ]
@@ -148,8 +81,8 @@ Please see [CONTRIBUTING](CONTRIBUTING.md) for details.
 The MIT License (MIT). Please see [License File](LICENSE.md) for more information.
 
 ## Todo
-- [ ] Add tests
-- [ ] Add support for more File Types
+- [x] Add tests
+- [x] Add support for more File Types (filetypes are supported according to [laravel-excel](https://laravel-excel.maatwebsite.nl))
 - [ ] Show all error messages
-- [ ] Chunk inserts
-- [ ] Queable
+- [x] Chunk inserts
+- [x] Queable

@@ -48,14 +48,29 @@ class ImportCsvTest extends IntegrationTest
                     'file' => $this->createTmpFile(__DIR__.'/../stubs/entries-without-title.csv'),
                 ])
             ->assertStatus(422)
-            ->assertJsonValidationErrors(['0.title']);
+            ->assertJsonValidationErrors([0]);
     }
 
-    protected function createTmpFile($path)
+    /** @test */
+    public function it_should_not_import_unkown_file_types()
+    {
+        $this->authenticate();
+        Storage::fake('public');
+
+        $this
+            ->json('post',
+                'nova-vendor/sparclex/nova-import-card/endpoint/entries', [
+                    'file' => $this->createTmpFile(__DIR__.'/../stubs/unknown.zip', 'zip'),
+                ])
+            ->assertStatus(422)
+            ->assertJsonValidationErrors([0]);
+    }
+
+    protected function createTmpFile($path, $ext = 'csv')
     {
         $tmp = tmpfile();
         fwrite($tmp, file_get_contents($path));
 
-        return new File('file.csv', $tmp);
+        return new File('file.' . $ext, $tmp);
     }
 }

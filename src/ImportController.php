@@ -3,49 +3,58 @@
 namespace Sparclex\NovaImportCard;
 
 use Laravel\Nova\Actions\Action;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Laravel\Nova\Http\Requests\NovaRequest;
+use Illuminate\Validation\ValidationException;
+use Maatwebsite\Excel\Exceptions\NoTypeDetectedException;
+use Symfony\Component\Debug\Exception\FatalThrowableError;
 
 class ImportController
 {
     public function handle(NovaRequest $request)
     {
         $resource = $request->newResource();
-        $fileReader = $resource::$importFileReader ?? config('sparclex-nova-import-card.file_reader');
+        $importerClass = $resource::$importer ?? config('nova-import-card.importer');
 
         $data = Validator::make($request->all(), [
-            'file' => 'required|file|mimes:'.$fileReader::mimes(),
+            'file' => 'required|file'
         ])->validate();
+
+        $importer = new $importerClass(
+            $resource->creationFields($request)->pluck('attribute'),
+            $this->extractValidationRules($request, $resource)->toArray(),
+            get_class($resource->resource)
+        );
+
         try {
-            $fileReader = new $fileReader($data['file']);
-            $data = $fileReader->read();
-            $fileReader->afterRead();
-        } catch (\Exception $e) {
-            Action::danger(__('An error occurred during the import'));
+            $importer->import($data['file']);
+        }
+        catch(ImportException $e) {
+            $this->responseError($e->getMessage());
+        }
+        catch(\TypeError $e) {
+            $this->responseError(__('Invalid file type'));
+        }
+        catch(NoTypeDetectedException $e) { // Remove as soon as issue https://github.com/Maatwebsite/Laravel-Excel/issues/1908 is fixed
+            $this->responseError(__('Invalid file type'));
         }
 
-        $this->validateFields($data, $request, $resource);
+        $message =  method_exists($importer, 'message') ? $importer->message() : __('Import successful');
 
-        $message = DB::transaction(function () use ($resource, $data) {
-            $importHandler = $resource::$importHandler ?? config('sparclex-nova-import-card.import_handler');
-
-            return (new $importHandler($data))->handle($resource);
-        });
-
-        return isset($message['danger']) ? response($message, 422) : $message;
+        return Action::message($message);
     }
 
-    /**
-     * @param $data
-     * @param NovaRequest $request
-     * @param $resource
-     */
-    protected function validateFields($data, $request, $resource): void
-    {
-        $rules = collect($resource::rulesForCreation($request))->mapWithKeys(function ($rule, $key) {
-            return ['*.'.$key => $rule];
+    protected function extractValidationRules($request, $resource) {
+
+        return collect($resource::rulesForCreation($request))->mapWithKeys(function ($rule, $key) {
+            return [$key => $rule];
         });
-        Validator::make($data, $rules->toArray())->validate();
+    }
+
+    private function responseError($error)
+    {
+        throw ValidationException::withMessages([
+            0 => [$error],
+        ]);
     }
 }

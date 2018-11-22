@@ -6,6 +6,7 @@ use Mockery;
 use Laravel\Nova\Nova;
 use Illuminate\Queue\WorkerOptions;
 use Illuminate\Support\Facades\Hash;
+use Maatwebsite\Excel\ExcelServiceProvider;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Orchestra\Testbench\TestCase as Orchestra;
 use Sparclex\NovaImportCard\CardServiceProvider;
@@ -126,6 +127,7 @@ abstract class IntegrationTest extends Orchestra
             \Laravel\Nova\NovaCoreServiceProvider::class,
             \Laravel\Nova\NovaServiceProvider::class,
             CardServiceProvider::class,
+            ExcelServiceProvider::class,
         ];
     }
 

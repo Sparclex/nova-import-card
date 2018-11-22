@@ -15,6 +15,7 @@ matrix:
   - php: 7.2
 
 before_install:
+  - echo "{\"http-basic\":{\"nova.laravel.com\":{\"username\":\"${NOVA_USERNAME}\",\"password\":\"${NOVA_PASSWORD}\"}}}" > auth.json
   - composer self-update --stable --no-interaction
 
 install:

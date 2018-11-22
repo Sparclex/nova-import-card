@@ -1,24 +1,21 @@
 language: php
 
+php:
+- 7.0
+- 7.1
+- 7.2
+
 sudo: false
 
 cache:
   directories:
     - $HOME/.composer/cache
 
-matrix:
-  fast_finish: true
-  include:
-  # Laravel 5.5
-  - php: 7.0
-  - php: 7.1
-  - php: 7.2
-
 before_install:
-  - echo "{\"http-basic\":{\"nova.laravel.com\":{\"username\":\"${NOVA_USERNAME}\",\"password\":\"${NOVA_PASSWORD}\"}}}" > auth.json
   - composer self-update --stable --no-interaction
 
 install:
+  - echo "{\"http-basic\":{\"nova.laravel.com\":{\"username\":\"${NOVA_USERNAME}\",\"password\":\"${NOVA_PASSWORD}\"}}}" > auth.json
   - travis_retry composer install --no-suggest --no-interaction
 
 script:

@@ -71,6 +71,6 @@ class ImportCsvTest extends IntegrationTest
         $tmp = tmpfile();
         fwrite($tmp, file_get_contents($path));
 
-        return new File('file.' . $ext, $tmp);
+        return new File('file.'.$ext, $tmp);
     }
 }

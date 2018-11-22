@@ -28,7 +28,7 @@ class BasicImporter implements ToModel, WithValidation, WithHeadingRow
     {
         $model = new $this->modelClass;
 
-        foreach($this->attributes as $attribute) {
+        foreach ($this->attributes as $attribute) {
             $model->{$attribute} = $row[$attribute] ?? null;
         }
 

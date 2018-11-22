@@ -7,7 +7,6 @@ use Illuminate\Support\Facades\Validator;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Illuminate\Validation\ValidationException;
 use Maatwebsite\Excel\Exceptions\NoTypeDetectedException;
-use Symfony\Component\Debug\Exception\FatalThrowableError;
 
 class ImportController
 {
@@ -17,7 +16,7 @@ class ImportController
         $importerClass = $resource::$importer ?? config('nova-import-card.importer');
 
         $data = Validator::make($request->all(), [
-            'file' => 'required|file'
+            'file' => 'required|file',
         ])->validate();
 
         $importer = new $importerClass(
@@ -28,24 +27,21 @@ class ImportController
 
         try {
             $importer->import($data['file']);
-        }
-        catch(ImportException $e) {
+        } catch (ImportException $e) {
             $this->responseError($e->getMessage());
-        }
-        catch(\TypeError $e) {
+        } catch (\TypeError $e) {
             $this->responseError(__('Invalid file type'));
-        }
-        catch(NoTypeDetectedException $e) { // Remove as soon as issue https://github.com/Maatwebsite/Laravel-Excel/issues/1908 is fixed
+        } catch (NoTypeDetectedException $e) { // Remove as soon as issue https://github.com/Maatwebsite/Laravel-Excel/issues/1908 is fixed
             $this->responseError(__('Invalid file type'));
         }
 
-        $message =  method_exists($importer, 'message') ? $importer->message() : __('Import successful');
+        $message = method_exists($importer, 'message') ? $importer->message() : __('Import successful');
 
         return Action::message($message);
     }
 
-    protected function extractValidationRules($request, $resource) {
-
+    protected function extractValidationRules($request, $resource)
+    {
         return collect($resource::rulesForCreation($request))->mapWithKeys(function ($rule, $key) {
             return [$key => $rule];
         });

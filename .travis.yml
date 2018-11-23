@@ -1,22 +1,23 @@
 language: php
 
 php:
-- 7.0
 - 7.1
 - 7.2
 
-sudo: false
-
-cache:
-  directories:
-    - $HOME/.composer/cache
-
-before_install:
-  - composer self-update --stable --no-interaction
+env:
+  matrix:
+  - COMPOSER_FLAGS="--prefer-lowest"
+  - COMPOSER_FLAGS=""
+  global:
+  - secure: e+HTqZGusASM/6QcYJ7wIW5dmBq2plt8+JFP39kI+3eDrk1vhXxH43D8k1QUl4mepGo5p50EcIltoCLt99u9Jxzrl8AC0iDzGljQMERcsr5KALLblJPf05gT69eiSGoYB2qEbgQhMpP3erffKioDFh3uF4hImNPVP6eGndxJ6FRZ9/PP5tl5DXV2EbP7u1eUwbMTdoPl5Mk+oZUk7qwV4s5Wp0bEJMe45AoUyArbU2Czwn2dkfbxif4p8SoN7Bs9G1/MQqmoJinJH/wqT8aVPgZqg1m81FVouk/HmDB0sg+YGdK5FItGQpqSUWThbRAeCJ1s3iRnP96nl96g2WP2MP+286roBuZUs//A0rtrKYlg8Xv7lfjCz7/kRlAs5tY1h+McNOmc7Sq51FXj7lB55Q82qqLtUGkoEs8/Om4XxDncU7Dh2d7cTbhgPzPVz5KO3Ofg3wSJBxxueEjjy2DNxl5VAvF8wptqERmjWLjskUyhvZxrOLvV18+juEvy2QcD2Qu8SwaDrB4P/FXUKrdHPpqEnrCGMR66JzKR80WiONJjHAHRZCbb3Z5Z9Qwc4prx5TiVqgmACiOtLz06ujnfkYvLrOQROUATs/7F7EWS30PZ1ASh8+qa9b5FQ7YHGymsw84ALyluzvv4qTIzAk0SyQq3UKSfdW1tBOOgiZ/54ns=
+  - secure: fciI9hH/TWU6il9+JvQ2ciZbDHBG8QM/qbKZ2GBFgTqJ9xotrJV1YXHo2jKMJ0KU6yb5XgU1qCLesxnfvsTT8MYU9cYbin/m1tBVc3iVdGZGI95VWQdS/Ev1SGXwZ590fxOigPDvgx3+UdcqrujccSs2fipc/5YKt3aP9cSrJkZXJ1EEDsj6OGqFlD617xx7/+6+odRUOSuSLpRyn8jvhXY1ktUJrAZR0jM9SfQLe/Txaz9cbZeN89WlbFmV3Nhe0l64AfhMBdCt7yR/PmDhp02SXJDe+uvetcP0aqgqKvJ34itUwRZIWy/eiKDFf215+SpqE2GVThIZAhVrC7SJBOsrKID/XHVIT2t9ZMVesM/RHJbgi6b0KpHv/GsyNB9+kjqLzocC+MYiYAtOZ2Gxs9RJKOpAlExixpcuJXBmWKMFx6w4lLns+0NrOK7Z2WHkQwGPtk6b89tfZ+VZjC+zjuN6syGU/jFcuD4W7fxVdw1kRs0LDHl9gK0BJ1Zw/fbIeYzW0voYJSeYaA86SlIBbRcrUH53d6xMYcrFyFFwTKh8Ym7tu6VikztDPkhdP4ztRbg46hQCkEA75PwI/VkconwkuwlRK2ggUZ5Q8f1kItp3Y7aju9+UwPdtnxDUYHOY8B36Xh20HalZJbBqy90E5Cozv7SkOg7ErTC33wOdQag=
 
 install:
-  - echo "{\"http-basic\":{\"nova.laravel.com\":{\"username\":\"${NOVA_USERNAME}\",\"password\":\"${NOVA_PASSWORD}\"}}}" > auth.json
-  - travis_retry composer install --no-suggest --no-interaction
+- echo "{\"http-basic\":{\"nova.laravel.com\":{\"username\":\"${NOVA_USERNAME}\",\"password\":\"${NOVA_PASSWORD}\"}}}" > auth.json
+
+before_script:
+- travis_retry composer self-update
+- travis_retry composer update ${COMPOSER_FLAGS} --no-interaction --prefer-source
 
 script:
-  - vendor/bin/phpunit --verbose --configuration phpunit.xml
+- vendor/bin/phpunit --coverage-text --coverage-clover=coverage.clover

@@ -6,15 +6,16 @@ use Laravel\Nova\Resource;
 use Laravel\Nova\Fields\ID;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\Text;
+use Laravel\Nova\Fields\BelongsTo;
 
-class EntryResource extends Resource
+class AddressResource extends Resource
 {
     /**
      * The model the resource corresponds to.
      *
      * @var string
      */
-    public static $model = Entry::class;
+    public static $model = Address::class;
 
     /**
      * The columns that should be searched.
@@ -32,7 +33,7 @@ class EntryResource extends Resource
      */
     public static function uriKey()
     {
-        return 'entries';
+        return 'addresses';
     }
 
     /**
@@ -45,8 +46,8 @@ class EntryResource extends Resource
     {
         return [
             ID::make('ID', 'id'),
-            Text::make('Title')->rules('required'),
-            Text::make('Amount')->rules('nullable', 'numeric'),
+            BelongsTo::make('User', 'user', UserResource::class)->nullable(),
+            Text::make('Street')
         ];
     }
 }

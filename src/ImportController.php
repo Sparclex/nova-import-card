@@ -3,6 +3,7 @@
 namespace Sparclex\NovaImportCard;
 
 use Laravel\Nova\Actions\Action;
+use Laravel\Nova\Rules\Relatable;
 use Illuminate\Support\Facades\Validator;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Illuminate\Validation\ValidationException;
@@ -19,7 +20,9 @@ class ImportController
             'file' => 'required|file',
         ])->validate();
 
+//        dd($this->extractValidationRules($request, $resource)->toArray());
         $importer = new $importerClass(
+            $resource,
             $resource->creationFields($request)->pluck('attribute'),
             $this->extractValidationRules($request, $resource)->toArray(),
             get_class($resource->resource)
@@ -43,6 +46,19 @@ class ImportController
     protected function extractValidationRules($request, $resource)
     {
         return collect($resource::rulesForCreation($request))->mapWithKeys(function ($rule, $key) {
+            foreach($rule as $i => $r)
+            {
+                if(!is_object($r)) continue;
+
+                // Make sure relation checks start out with a clean query
+                if(is_a($r, Relatable::class))
+                {
+                    $rule[$i] = function() use($r) {
+                        $r->query = $r->query->newQuery();
+                        return $r;
+                    };
+                }
+            }
             return [$key => $rule];
         });
     }

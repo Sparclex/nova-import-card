@@ -10,7 +10,9 @@ use Maatwebsite\Excel\ExcelServiceProvider;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Orchestra\Testbench\TestCase as Orchestra;
 use Sparclex\NovaImportCard\CardServiceProvider;
-use Sparclex\NovaImportCard\Tests\Fixtures\EntryResource;
+use Sparclex\NovaImportCard\Tests\Fixtures\User;
+use Sparclex\NovaImportCard\Tests\Fixtures\UserResource;
+use Sparclex\NovaImportCard\Tests\Fixtures\AddressResource;
 
 abstract class IntegrationTest extends Orchestra
 {
@@ -40,7 +42,8 @@ abstract class IntegrationTest extends Orchestra
         Nova::$resources = [];
 
         Nova::resources([
-            EntryResource::class,
+            UserResource::class,
+            AddressResource::class
         ]);
 
         Nova::auth(function () {

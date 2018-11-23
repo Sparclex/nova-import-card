@@ -17,8 +17,9 @@ class BasicImporter implements ToModel, WithValidation, WithHeadingRow
 
     protected $modelClass;
 
-    public function __construct($attributes, $rules, $modelClass)
+    public function __construct($resource, $attributes, $rules, $modelClass)
     {
+        $this->resource = $resource;
         $this->attributes = $attributes;
         $this->rules = $rules;
         $this->modelClass = $modelClass;
@@ -26,11 +27,9 @@ class BasicImporter implements ToModel, WithValidation, WithHeadingRow
 
     public function model(array $row)
     {
-        $model = new $this->modelClass;
-
-        foreach ($this->attributes as $attribute) {
-            $model->{$attribute} = $row[$attribute] ?? null;
-        }
+        [$model, $callbacks] = $this->resource::fill(
+            new ImportNovaRequest($row), $this->resource::newModel()
+        );
 
         return $model;
     }

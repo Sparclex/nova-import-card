@@ -4,13 +4,20 @@ namespace Sparclex\NovaImportCard\Tests\Feature;
 
 use Illuminate\Http\Testing\File;
 use Illuminate\Support\Facades\Storage;
+use Sparclex\NovaImportCard\Tests\Fixtures\User;
 use Sparclex\NovaImportCard\Tests\Fixtures\Entry;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Sparclex\NovaImportCard\Tests\IntegrationTest;
+use Sparclex\NovaImportCard\Tests\Fixtures\Address;
 
 class ImportCsvTest extends IntegrationTest
 {
     use RefreshDatabase;
+
+    public function setUp()
+    {
+        parent::setUp();
+    }
 
     /** @test */
     public function it_should_import_a_csv()
@@ -20,19 +27,27 @@ class ImportCsvTest extends IntegrationTest
 
         $this
             ->json('post',
-                'nova-vendor/sparclex/nova-import-card/endpoint/entries', [
-                    'file' => $this->createTmpFile(__DIR__.'/../stubs/entries.csv'),
+                'nova-vendor/sparclex/nova-import-card/endpoint/users', [
+                    'file' => $this->createTmpFile(__DIR__.'/../stubs/users.csv'),
                 ])
             ->assertSuccessful();
 
-        $this->assertDatabaseHas('entries', [
-            'title' => 'Entry 1',
-            'amount' => 10,
+        $this->assertDatabaseHas('users', [
+            'username' => 'user1',
+            'name' => 'john',
+            'age' => 21,
         ]);
 
-        $this->assertDatabaseHas('entries', [
-            'title' => 'Entry 2',
-            'amount' => null,
+        $this->assertDatabaseHas('users', [
+            'username' => 'user2',
+            'name' => 'jane',
+            'age' => null,
+        ]);
+
+        $this->assertDatabaseHas('users', [
+            'username' => 'user3',
+            'name' => 'jannet',
+            'age' => 42,
         ]);
     }
 
@@ -44,8 +59,8 @@ class ImportCsvTest extends IntegrationTest
 
         $this
             ->json('post',
-                'nova-vendor/sparclex/nova-import-card/endpoint/entries', [
-                    'file' => $this->createTmpFile(__DIR__.'/../stubs/entries-without-title.csv'),
+                'nova-vendor/sparclex/nova-import-card/endpoint/users', [
+                    'file' => $this->createTmpFile(__DIR__.'/../stubs/users-with-null-value.csv'),
                 ])
             ->assertStatus(422)
             ->assertJsonValidationErrors([0]);
@@ -59,11 +74,59 @@ class ImportCsvTest extends IntegrationTest
 
         $this
             ->json('post',
-                'nova-vendor/sparclex/nova-import-card/endpoint/entries', [
+                'nova-vendor/sparclex/nova-import-card/endpoint/users', [
                     'file' => $this->createTmpFile(__DIR__.'/../stubs/unknown.zip', 'zip'),
                 ])
             ->assertStatus(422)
             ->assertJsonValidationErrors([0]);
+    }
+
+    /** @test */
+    public function it_should_import_with_related()
+    {
+        $this->authenticate();
+        Storage::fake('public');
+        factory(User::class, 3)->create();
+
+        $this
+            ->json('post',
+                'nova-vendor/sparclex/nova-import-card/endpoint/addresses', [
+                    'file' => $this->createTmpFile(__DIR__.'/../stubs/addresses.csv'),
+                ])
+            ->assertSuccessful();
+
+        $this->assertDatabaseHas('addresses', [
+            'user_id' => 1,
+            'street' => 'street1',
+        ]);
+        $this->assertDatabaseHas('addresses', [
+            'user_id' => 2,
+            'street' => 'street2',
+        ]);
+    }
+
+        /** @test */
+    public function it_should_import_with_nullable_related()
+    {
+        $this->authenticate();
+        Storage::fake('public');
+        factory(User::class, 3)->create();
+
+        $this
+            ->json('post',
+                'nova-vendor/sparclex/nova-import-card/endpoint/addresses', [
+                    'file' => $this->createTmpFile(__DIR__.'/../stubs/addresses-nullable.csv'),
+                ])
+            ->assertSuccessful();
+
+        $this->assertDatabaseHas('addresses', [
+            'user_id' => null,
+            'street' => 'street1',
+        ]);
+        $this->assertDatabaseHas('addresses', [
+            'user_id' => null,
+            'street' => 'street2',
+        ]);
     }
 
     protected function createTmpFile($path, $ext = 'csv')

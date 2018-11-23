@@ -5,10 +5,8 @@ namespace Sparclex\NovaImportCard\Tests\Feature;
 use Illuminate\Http\Testing\File;
 use Illuminate\Support\Facades\Storage;
 use Sparclex\NovaImportCard\Tests\Fixtures\User;
-use Sparclex\NovaImportCard\Tests\Fixtures\Entry;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Sparclex\NovaImportCard\Tests\IntegrationTest;
-use Sparclex\NovaImportCard\Tests\Fixtures\Address;
 
 class ImportCsvTest extends IntegrationTest
 {
@@ -105,7 +103,7 @@ class ImportCsvTest extends IntegrationTest
         ]);
     }
 
-        /** @test */
+    /** @test */
     public function it_should_import_with_nullable_related()
     {
         $this->authenticate();

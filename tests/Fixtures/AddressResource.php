@@ -47,7 +47,7 @@ class AddressResource extends Resource
         return [
             ID::make('ID', 'id'),
             BelongsTo::make('User', 'user', UserResource::class)->nullable(),
-            Text::make('Street')
+            Text::make('Street'),
         ];
     }
 }

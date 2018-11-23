@@ -43,7 +43,7 @@ abstract class IntegrationTest extends Orchestra
 
         Nova::resources([
             UserResource::class,
-            AddressResource::class
+            AddressResource::class,
         ]);
 
         Nova::auth(function () {

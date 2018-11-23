@@ -49,7 +49,7 @@ class UserResource extends Resource
             Text::make('Username')->rules('required'),
             Text::make('Name')->rules('required'),
             Text::make('Age')->rules('nullable', 'numeric'),
-            HasOne::make('Address', 'address', AddressResource::class)
+            HasOne::make('Address', 'address', AddressResource::class),
         ];
     }
 }

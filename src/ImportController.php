@@ -46,19 +46,21 @@ class ImportController
     protected function extractValidationRules($request, $resource)
     {
         return collect($resource::rulesForCreation($request))->mapWithKeys(function ($rule, $key) {
-            foreach($rule as $i => $r)
-            {
-                if(!is_object($r)) continue;
+            foreach ($rule as $i => $r) {
+                if (! is_object($r)) {
+                    continue;
+                }
 
                 // Make sure relation checks start out with a clean query
-                if(is_a($r, Relatable::class))
-                {
-                    $rule[$i] = function() use($r) {
+                if (is_a($r, Relatable::class)) {
+                    $rule[$i] = function () use ($r) {
                         $r->query = $r->query->newQuery();
+
                         return $r;
                     };
                 }
             }
+
             return [$key => $rule];
         });
     }

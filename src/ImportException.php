@@ -2,6 +2,6 @@
 
 namespace Sparclex\NovaImportCard;
 
-class ImportException extends Exception
+class ImportException extends \Exception
 {
 }

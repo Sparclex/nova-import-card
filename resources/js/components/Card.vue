@@ -1,5 +1,5 @@
 <template>
-    <card class="flex flex-col">
+    <card class="flex flex-col h-auto">
         <div class="px-3 py-3">
             <h1 class="text-xl font-light">Import {{this.card.resourceLabel}}</h1>
             <form @submit.prevent="processImport" ref="form">
@@ -25,12 +25,12 @@
 
                 <div class="flex">
                     <div v-if="errors">
-                        <p class="text-danger">{{firstError}}</p>
+                        <p class="text-danger mb-1" v-for="error in errors">{{error[0]}}</p>
                     </div>
                     <button
                         :disabled="working"
                         type="submit"
-                        class="btn btn-default btn-primary ml-auto"
+                        class="btn btn-default btn-primary ml-auto mt-auto"
                     >
                         <loader v-if="working" width="30"></loader>
                         <span v-else>{{__('Import')}}</span>

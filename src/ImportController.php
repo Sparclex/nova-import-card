@@ -20,7 +20,6 @@ class ImportController
             'file' => 'required|file',
         ])->validate();
 
-//        dd($this->extractValidationRules($request, $resource)->toArray());
         $importer = new $importerClass(
             $resource,
             $resource->creationFields($request)->pluck('attribute'),

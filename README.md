@@ -81,10 +81,3 @@ Please see [CONTRIBUTING](CONTRIBUTING.md) for details.
 ## License
 
 The MIT License (MIT). Please see [License File](LICENSE.md) for more information.
-
-## Todo
-- [x] Add tests
-- [x] Add support for more File Types (filetypes are supported according to [laravel-excel](https://laravel-excel.maatwebsite.nl))
-- [ ] Show all error messages
-- [x] Chunk inserts
-- [x] Queable

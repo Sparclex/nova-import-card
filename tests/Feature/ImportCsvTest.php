@@ -12,7 +12,7 @@ class ImportCsvTest extends IntegrationTest
 {
     use RefreshDatabase;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
     }
@@ -24,10 +24,13 @@ class ImportCsvTest extends IntegrationTest
         Storage::fake('public');
 
         $this
-            ->json('post',
-                'nova-vendor/sparclex/nova-import-card/endpoint/users', [
-                    'file' => $this->createTmpFile(__DIR__.'/../stubs/users.csv'),
-                ])
+            ->json(
+                'post',
+                'nova-vendor/sparclex/nova-import-card/endpoint/users',
+                [
+                    'file' => $this->createTmpFile(__DIR__ . '/../stubs/users.csv'),
+                ]
+            )
             ->assertSuccessful();
 
         $this->assertDatabaseHas('users', [
@@ -56,10 +59,13 @@ class ImportCsvTest extends IntegrationTest
         Storage::fake('public');
 
         $this
-            ->json('post',
-                'nova-vendor/sparclex/nova-import-card/endpoint/users', [
-                    'file' => $this->createTmpFile(__DIR__.'/../stubs/users-with-null-value.csv'),
-                ])
+            ->json(
+                'post',
+                'nova-vendor/sparclex/nova-import-card/endpoint/users',
+                [
+                    'file' => $this->createTmpFile(__DIR__ . '/../stubs/users-with-null-value.csv'),
+                ]
+            )
             ->assertStatus(422)
             ->assertJsonValidationErrors([0]);
     }
@@ -67,14 +73,18 @@ class ImportCsvTest extends IntegrationTest
     /** @test */
     public function it_should_not_import_unkown_file_types()
     {
+        $this->withoutExceptionHandling();
         $this->authenticate();
         Storage::fake('public');
 
         $this
-            ->json('post',
-                'nova-vendor/sparclex/nova-import-card/endpoint/users', [
-                    'file' => $this->createTmpFile(__DIR__.'/../stubs/unknown.zip', 'zip'),
-                ])
+            ->json(
+                'post',
+                'nova-vendor/sparclex/nova-import-card/endpoint/users',
+                [
+                    'file' => $this->createTmpFile(__DIR__ . '/../stubs/unknown.zip', 'zip'),
+                ]
+            )
             ->assertStatus(422)
             ->assertJsonValidationErrors([0]);
     }
@@ -87,10 +97,13 @@ class ImportCsvTest extends IntegrationTest
         factory(User::class, 3)->create();
 
         $this
-            ->json('post',
-                'nova-vendor/sparclex/nova-import-card/endpoint/addresses', [
-                    'file' => $this->createTmpFile(__DIR__.'/../stubs/addresses.csv'),
-                ])
+            ->json(
+                'post',
+                'nova-vendor/sparclex/nova-import-card/endpoint/addresses',
+                [
+                    'file' => $this->createTmpFile(__DIR__ . '/../stubs/addresses.csv'),
+                ]
+            )
             ->assertSuccessful();
 
         $this->assertDatabaseHas('addresses', [
@@ -111,10 +124,13 @@ class ImportCsvTest extends IntegrationTest
         factory(User::class, 3)->create();
 
         $this
-            ->json('post',
-                'nova-vendor/sparclex/nova-import-card/endpoint/addresses', [
-                    'file' => $this->createTmpFile(__DIR__.'/../stubs/addresses-nullable.csv'),
-                ])
+            ->json(
+                'post',
+                'nova-vendor/sparclex/nova-import-card/endpoint/addresses',
+                [
+                    'file' => $this->createTmpFile(__DIR__ . '/../stubs/addresses-nullable.csv'),
+                ]
+            )
             ->assertSuccessful();
 
         $this->assertDatabaseHas('addresses', [
@@ -132,6 +148,6 @@ class ImportCsvTest extends IntegrationTest
         $tmp = tmpfile();
         fwrite($tmp, file_get_contents($path));
 
-        return new File('file.'.$ext, $tmp);
+        return new File('file.' . $ext, $tmp);
     }
 }

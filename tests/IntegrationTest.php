@@ -28,7 +28,7 @@ abstract class IntegrationTest extends Orchestra
      *
      * @return void
      */
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -36,7 +36,7 @@ abstract class IntegrationTest extends Orchestra
 
         $this->loadMigrations();
 
-        $this->withFactories(__DIR__.'/Factories');
+        $this->withFactories(__DIR__ . '/Factories');
 
         Nova::$tools = [];
         Nova::$resources = [];
@@ -60,7 +60,7 @@ abstract class IntegrationTest extends Orchestra
     {
         $this->loadMigrationsFrom([
             '--database' => 'sqlite',
-            '--realpath' => realpath(__DIR__.'/Migrations'),
+            '--realpath' => realpath(__DIR__ . '/Migrations'),
         ]);
     }
 
@@ -89,7 +89,9 @@ abstract class IntegrationTest extends Orchestra
     {
         for ($i = 0; $i < $times; $i++) {
             $this->worker()->runNextJob(
-                'redis', 'default', $this->workerOptions()
+                'redis',
+                'default',
+                $this->workerOptions()
             );
         }
     }

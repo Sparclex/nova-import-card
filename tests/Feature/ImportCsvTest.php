@@ -28,7 +28,7 @@ class ImportCsvTest extends IntegrationTest
                 'post',
                 'nova-vendor/sparclex/nova-import-card/endpoint/users',
                 [
-                    'file' => $this->createTmpFile(__DIR__ . '/../stubs/users.csv'),
+                    'file' => $this->createTmpFile(__DIR__.'/../stubs/users.csv'),
                 ]
             )
             ->assertSuccessful();
@@ -63,7 +63,7 @@ class ImportCsvTest extends IntegrationTest
                 'post',
                 'nova-vendor/sparclex/nova-import-card/endpoint/users',
                 [
-                    'file' => $this->createTmpFile(__DIR__ . '/../stubs/users-with-null-value.csv'),
+                    'file' => $this->createTmpFile(__DIR__.'/../stubs/users-with-null-value.csv'),
                 ]
             )
             ->assertStatus(422)
@@ -81,7 +81,7 @@ class ImportCsvTest extends IntegrationTest
                 'post',
                 'nova-vendor/sparclex/nova-import-card/endpoint/users',
                 [
-                    'file' => $this->createTmpFile(__DIR__ . '/../stubs/unknown.zip', 'zip'),
+                    'file' => $this->createTmpFile(__DIR__.'/../stubs/unknown.zip', 'zip'),
                 ]
             )
             ->assertStatus(422)
@@ -100,7 +100,7 @@ class ImportCsvTest extends IntegrationTest
                 'post',
                 'nova-vendor/sparclex/nova-import-card/endpoint/addresses',
                 [
-                    'file' => $this->createTmpFile(__DIR__ . '/../stubs/addresses.csv'),
+                    'file' => $this->createTmpFile(__DIR__.'/../stubs/addresses.csv'),
                 ]
             )
             ->assertSuccessful();
@@ -127,7 +127,7 @@ class ImportCsvTest extends IntegrationTest
                 'post',
                 'nova-vendor/sparclex/nova-import-card/endpoint/addresses',
                 [
-                    'file' => $this->createTmpFile(__DIR__ . '/../stubs/addresses-nullable.csv'),
+                    'file' => $this->createTmpFile(__DIR__.'/../stubs/addresses-nullable.csv'),
                 ]
             )
             ->assertSuccessful();
@@ -147,6 +147,6 @@ class ImportCsvTest extends IntegrationTest
         $tmp = tmpfile();
         fwrite($tmp, file_get_contents($path));
 
-        return new File('file.' . $ext, $tmp);
+        return new File('file.'.$ext, $tmp);
     }
 }

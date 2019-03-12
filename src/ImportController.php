@@ -31,9 +31,7 @@ class ImportController
             $importer->import($data['file']);
         } catch (ImportException $e) {
             $this->responseError($e->getMessage());
-        } catch (\TypeError $e) {
-            $this->responseError(__('Invalid file type'));
-        } catch (NoTypeDetectedException $e) { // Remove as soon as issue https://github.com/Maatwebsite/Laravel-Excel/issues/1908 is fixed
+        } catch (NoTypeDetectedException $e) {
             $this->responseError(__('Invalid file type'));
         }
 

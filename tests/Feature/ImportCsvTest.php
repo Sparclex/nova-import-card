@@ -73,7 +73,6 @@ class ImportCsvTest extends IntegrationTest
     /** @test */
     public function it_should_not_import_unkown_file_types()
     {
-        $this->withoutExceptionHandling();
         $this->authenticate();
         Storage::fake('public');
 

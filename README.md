@@ -32,7 +32,7 @@ public function card()
 {
     return [
         // ...
-        new \Sparclex\NovaImportCard\NovaImportCard(App\Nova\User::class),
+        new \Sparclex\NovaImportCard\NovaImportCard(\App\Nova\User::class),
     ];
 }
 ```

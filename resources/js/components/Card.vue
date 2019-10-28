@@ -1,7 +1,7 @@
 <template>
     <card class="flex flex-col h-auto">
         <div class="px-3 py-3">
-            <h1 class="text-xl font-light">Import {{this.card.resourceLabel}}</h1>
+            <h1 class="text-xl font-light">{{__('Import')}} {{this.card.resourceLabel}}</h1>
             <form @submit.prevent="processImport" ref="form">
                 <div class="py-4">
                     <span class="form-file mr-4">
@@ -49,7 +49,7 @@ export default {
         return {
             fileName: '',
             file: null,
-            label: 'no file selected',
+            label: this.__('no file selected'),
             working: false,
             errors: null,
         };
